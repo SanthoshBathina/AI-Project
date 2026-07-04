@@ -335,6 +335,42 @@ async def chat_endpoint(
     elif "tell time" in user_msg_low or "what time is it" in user_msg_low:
         time_str = datetime.datetime.now().strftime("%I:%M %p")
         return {"response": f"The current time is {time_str}.", "action": "none"}
+    
+    # Image Generation Detection
+    image_keywords = [
+        "generate image of", "generate the image of", "generate an image of",
+        "create image of", "create an image of", "generate a picture of", 
+        "create a picture of", "make an image of", "make a picture of",
+        "draw an image of", "draw a picture of", "draw a photo of",
+        "generate photo of", "generate a photo of"
+    ]
+    is_image_request = provider == "imagen"
+    extracted_prompt = user_msg
+    
+    if not is_image_request:
+        for k in image_keywords:
+            if user_msg_low.startswith(k):
+                is_image_request = True
+                extracted_prompt = user_msg[len(k):].strip()
+                break
+            elif k in user_msg_low:
+                is_image_request = True
+                idx = user_msg_low.find(k)
+                extracted_prompt = user_msg[idx + len(k):].strip()
+                break
+                
+    if is_image_request:
+        if not extracted_prompt:
+            extracted_prompt = "a beautiful futuristic landscape"
+        try:
+            import urllib.parse
+            encoded_prompt = urllib.parse.quote(extracted_prompt)
+            image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true&model=flux"
+            response_text = f"Here is the image you requested for **\"{extracted_prompt}\"**:\n\n![{extracted_prompt}]({image_url})"
+            return {"response": response_text, "action": "none"}
+        except Exception as e:
+            return {"response": f"I apologize. My image cognitive relay encountered an error: {str(e)}", "action": "none"}
+
     try:
         history_list = json.loads(history)
         print(f"[DEBUG] Request received. Message: {user_msg}, Provider requested: {provider}, File attached: {file is not None}, GROQ_AVAILABLE: {GROQ_AVAILABLE}")

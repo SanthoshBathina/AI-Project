@@ -268,10 +268,12 @@ async function fetchChats() {
     if (res.ok) {
       const data = await res.json();
       chats = data;
-      if (!chats.find(c => c.id === currentChatId)) {
-        createNewChat();
+      if (currentChatId && chats.find(c => c.id === currentChatId)) {
+        switchChat(currentChatId);
+      } else if (chats.length > 0) {
+        switchChat(chats[0].id);
       } else {
-        renderHistory();
+        createNewChat();
       }
     }
   } catch (err) { console.error('Failed to fetch chats', err); }
@@ -407,6 +409,11 @@ function switchChat(id) {
 
 function createNewChat() {
   if (typeof showChatView === 'function') showChatView();
+  const emptyChat = chats.find(c => !c.messages || c.messages.length === 0);
+  if (emptyChat) {
+    switchChat(emptyChat.id);
+    return;
+  }
   currentChatId = 'chat_' + Date.now();
   chats.unshift({ id: currentChatId, title: 'New Chat', messages: [], time: Date.now() });
   saveChats();
@@ -498,6 +505,14 @@ const fileRemoveBtn = document.getElementById('file-remove-btn');
 attachBtn.addEventListener('click', () => {
   fileUpload.click();
 });
+function updateInputPlaceholder() {
+  if (selectedProvider === 'imagen') {
+    userInput.placeholder = "Describe the image you want to create...";
+  } else {
+    userInput.placeholder = "Ask anything...";
+  }
+}
+
 function handleFileSelection(file) {
   if (!file) return;
   const dt = new DataTransfer();
@@ -512,6 +527,7 @@ function handleFileSelection(file) {
     geminiOpt.classList.add('active');
     currentModelIcon.innerHTML = geminiOpt.querySelector('svg').outerHTML;
   }
+  updateInputPlaceholder();
 }
 
 fileUpload.addEventListener('change', (e) => {
@@ -557,8 +573,25 @@ modelOptions.forEach(opt => {
     opt.classList.add('active');
     currentModelIcon.innerHTML = opt.querySelector('svg').outerHTML;
     modelDropdown.classList.add('hidden');
+    updateInputPlaceholder();
   });
 });
+
+const imageGenBtn = document.getElementById('image-gen-btn');
+if (imageGenBtn) {
+  imageGenBtn.addEventListener('click', () => {
+    createNewChat();
+    selectedProvider = 'imagen';
+    modelOptions.forEach(o => o.classList.remove('active'));
+    const imagenOpt = document.querySelector('.model-option[data-provider="imagen"]');
+    if (imagenOpt) {
+      imagenOpt.classList.add('active');
+      currentModelIcon.innerHTML = imagenOpt.querySelector('svg').outerHTML;
+    }
+    updateInputPlaceholder();
+    userInput.focus();
+  });
+}
 async function sendMessage() {
   const text = userInput.value.trim();
   const selectedFile = fileUpload.files[0];

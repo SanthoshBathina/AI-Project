@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PAS GPT | Enterprise Cognitive Solutions</title>
     <meta name="description" content="PAS GPT — AI-powered enterprise assistant. Build smarter, scale faster with cognitive intelligence.">
-    <link rel="stylesheet" href="/static/style.css?v=3.2">
+    <link rel="stylesheet" href="/static/style.css?v=3.4">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -143,7 +143,7 @@
             <span>PAS GPT</span>
         </div>
         <p>Build Smarter. Scale Faster.</p>
-        <p class="footer-copy">© 2024 PAS GPT — Enterprise Cognitive Solutions</p>
+        <p class="footer-copy">© 2026 PAS GPT — Enterprise Cognitive Solutions</p>
     </footer>
 </div>
 <div id="auth-modal" class="auth-modal-overlay hidden">
@@ -301,6 +301,9 @@
                     <button id="attach-btn" title="Attach file" class="attach-trigger">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                     </button>
+                    <button id="image-gen-btn" title="Create AI Image" class="image-gen-trigger">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </button>
                     <textarea id="user-input" placeholder="Ask anything..." rows="1"></textarea>
                     <div class="entry-actions">
                         <div class="model-selector" id="model-selector" title="Select AI Model">
@@ -315,6 +318,10 @@
                                 <div class="model-option" data-provider="groq">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                                     <span>Groq</span>
+                                </div>
+                                <div class="model-option" data-provider="imagen">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    <span>Imagen</span>
                                 </div>
                             </div>
                         </div>
@@ -366,6 +373,6 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="/static/script.js?v=3.3"></script>
+<script src="/static/script.js?v=3.4"></script>
 </body>
 </html>
